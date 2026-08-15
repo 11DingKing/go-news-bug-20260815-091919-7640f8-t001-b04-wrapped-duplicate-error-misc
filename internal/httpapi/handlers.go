@@ -57,7 +57,7 @@ func (s *Server) writeEventResult(w http.ResponseWriter, err error) {
 	switch {
 	case err == nil:
 		w.WriteHeader(http.StatusAccepted)
-	case err == store.ErrDuplicate:
+	case errors.Is(err, store.ErrDuplicate):
 		// Idempotent retry: report success, never a server error.
 		w.WriteHeader(http.StatusAccepted)
 	case errors.Is(err, ingest.ErrQueueFull):
